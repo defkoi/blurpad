@@ -1,11 +1,20 @@
-# image formatter
+# Blurpad - Image formatter
 
-## flags
+## Usage
 
-| flag |  default   |            usage             |
-| :--: | :--------: | :--------------------------: |
-|  -i  | input.png  |            input             |
-|  -o  |     -      |            output            |
-|  -p  |   target   | padding (css\|ratio\|target) |
-|  -r  | 4:5 1:1.91 |       threshold ratio        |
-|  -t  | instagram  |            target            |
+blurpad \[command\] \[...arguments\]
+
+## Flags
+
+| flag |  default  |    usage    |
+| :--: | :-------: | :---------: |
+|  -i  | input.png | input file  |
+|  -o  |           | output file |
+
+## Examples
+
+```shell
+blurpad target instagram -i my_photo.jpg -o out.jpg
+blurpad ratio 1:1
+blurpad padding "100 200"
+```

@@ -19,10 +19,45 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "blurpad/cmd"
+import (
+	"blurpad/internal"
+	"blurpad/lib"
+	"fmt"
+	"image"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+// ratioCmd represents the ratio command
+var ratioCmd = &cobra.Command{
+	Use:   "ratio",
+	Short: "Pad for thrashold ratio",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("Undefined ratio.")
+			return
+		}
+
+		ratio, err := internal.ParseRatio(args[0])
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := lib.OpenDoSave(
+			inputFile, outputFile,
+			func(src image.Image) (image.Image, error) {
+				pad := internal.PaddingFromRatio(src, ratio)
+				return internal.Process(src, pad), nil
+			}); err != nil {
+			fmt.Println(err)
+			return
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(ratioCmd)
 }

@@ -19,10 +19,52 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
-import "blurpad/cmd"
+import (
+	"blurpad/internal"
+	"blurpad/lib"
+	"fmt"
+	"image"
+	"strings"
 
-func main() {
-	cmd.Execute()
+	"github.com/spf13/cobra"
+)
+
+const targetLong = //
+`Supported targets:
+  instagram`
+
+// targetCmd represents the target command
+var targetCmd = &cobra.Command{
+	Use:   "target",
+	Short: "Pad for target ratio",
+	Long:  targetLong,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println("Undefined target.")
+			return
+		}
+
+		args[0] = strings.ToLower(args[0])
+		target, ok := internal.Targets[args[0]]
+		if !ok {
+			fmt.Println("Unknown target.")
+			return
+		}
+
+		if err := lib.OpenDoSave(
+			inputFile, outputFile,
+			func(src image.Image) (image.Image, error) {
+				pad := internal.PaddingFromRatio(src, target)
+				return internal.Process(src, pad), nil
+			}); err != nil {
+			fmt.Println(err)
+			return
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(targetCmd)
 }
