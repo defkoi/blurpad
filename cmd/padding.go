@@ -46,14 +46,12 @@ var paddingCmd = &cobra.Command{
 			return
 		}
 
-		if err := lib.OpenDoSave(
+		lib.OpenDoSave(
 			inputFile, outputFile,
 			func(src image.Image) (image.Image, error) {
 				return internal.Process(src, pad), nil
-			}); err != nil {
-			fmt.Println(err)
-			return
-		}
+			},
+		)
 	},
 }
 

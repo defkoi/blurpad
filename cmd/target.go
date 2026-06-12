@@ -53,15 +53,13 @@ var targetCmd = &cobra.Command{
 			return
 		}
 
-		if err := lib.OpenDoSave(
+		lib.OpenDoSave(
 			inputFile, outputFile,
 			func(src image.Image) (image.Image, error) {
 				pad := internal.PaddingFromRatio(src, target)
 				return internal.Process(src, pad), nil
-			}); err != nil {
-			fmt.Println(err)
-			return
-		}
+			},
+		)
 	},
 }
 

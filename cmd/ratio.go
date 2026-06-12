@@ -33,7 +33,7 @@ import (
 // ratioCmd represents the ratio command
 var ratioCmd = &cobra.Command{
 	Use:   "ratio",
-	Short: "Pad for thrashold ratio",
+	Short: "Pad for threshold ratio",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Println("Undefined ratio.")
@@ -46,15 +46,13 @@ var ratioCmd = &cobra.Command{
 			return
 		}
 
-		if err := lib.OpenDoSave(
+		lib.OpenDoSave(
 			inputFile, outputFile,
 			func(src image.Image) (image.Image, error) {
 				pad := internal.PaddingFromRatio(src, ratio)
 				return internal.Process(src, pad), nil
-			}); err != nil {
-			fmt.Println(err)
-			return
-		}
+			},
+		)
 	},
 }
 
