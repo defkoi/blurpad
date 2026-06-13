@@ -28,13 +28,13 @@ func ParsePadding(str string) (pad padding, err error) {
 	return pad, nil
 }
 
-func PaddingFromRatio(img image.Image, rat ratio) padding {
+func PaddingFromThresholdRatio(img image.Image, rat ratio) padding {
 	srcWidth, srcHeight := size(img)
 
 	var dx, dy int
 
 	if srcWidth > srcHeight {
-		dstHeight := int(rat[0] * float64(srcWidth))
+		dstHeight := int(rat[1] * float64(srcWidth))
 
 		if dstHeight <= srcHeight {
 			return padding{}
@@ -42,7 +42,7 @@ func PaddingFromRatio(img image.Image, rat ratio) padding {
 
 		dy = dstHeight - srcHeight
 	} else {
-		dstWidth := int(rat[1] * float64(srcHeight))
+		dstWidth := int(rat[0] * float64(srcHeight))
 
 		if dstWidth <= srcWidth {
 			return padding{}

@@ -38,7 +38,7 @@ const targetLong = //
 // targetCmd represents the target command
 var targetCmd = &cobra.Command{
 	Use:   "target",
-	Short: "Pad for target ratio",
+	Short: "Pad for target threshold ratio",
 	Long:  targetLong,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
@@ -53,13 +53,15 @@ var targetCmd = &cobra.Command{
 			return
 		}
 
-		lib.OpenDoSave(
+		if err := lib.OpenDoSave(
 			inputFile, outputFile,
 			func(src image.Image) (image.Image, error) {
-				pad := internal.PaddingFromRatio(src, target)
+				pad := internal.PaddingFromThresholdRatio(src, target)
 				return internal.Process(src, pad), nil
 			},
-		)
+		); err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 

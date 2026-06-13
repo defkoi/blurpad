@@ -46,13 +46,15 @@ var ratioCmd = &cobra.Command{
 			return
 		}
 
-		lib.OpenDoSave(
+		if err := lib.OpenDoSave(
 			inputFile, outputFile,
 			func(src image.Image) (image.Image, error) {
-				pad := internal.PaddingFromRatio(src, ratio)
+				pad := internal.PaddingFromThresholdRatio(src, ratio)
 				return internal.Process(src, pad), nil
 			},
-		)
+		); err != nil {
+			fmt.Println(err)
+		}
 	},
 }
 
